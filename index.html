@@ -43,6 +43,29 @@
       letter-spacing: -.045em;
     }
 
+    .best-seller-link {
+      display: inline-block;
+      margin-top: 1rem;
+      padding: .65rem 1rem;
+      border: 2px solid currentColor;
+      border-radius: 99px;
+      background: var(--mint);
+      color: var(--ink);
+      font-weight: 700;
+      text-underline-offset: .18em;
+      overflow-wrap: anywhere;
+    }
+
+    .best-seller-link:hover { background: var(--lilac); }
+
+    .best-seller-link:focus-visible,
+    #best-seller:target {
+      outline: 3px solid var(--ink);
+      outline-offset: 4px;
+    }
+
+    #best-seller { scroll-margin-top: 1rem; }
+
     .products {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -103,7 +126,7 @@
 </head>
 <body>
   <main>
-    <header>
+    <header id="showcase-heading">
       <p>Hello world!</p>
       <h1>Sky-high’s 3D Printing Showcase</h1>
     </header>
@@ -111,6 +134,7 @@
     <p id="product-status" role="status"></p>
   </main>
   <script>
+    const showcaseHeading = document.querySelector('#showcase-heading');
     const productList = document.querySelector('#products');
     const status = document.querySelector('#product-status');
 
@@ -120,6 +144,9 @@
         if (!response.ok) throw new Error('Product file could not be read');
 
         const products = await response.json();
+        const bestSellerIndex = products.findIndex(({ label }) =>
+          typeof label === 'string' && /^best[\s-]*seller$/i.test(label.trim())
+        );
         const cards = products.map(({ name, pitch, label, image }) => {
           const card = document.createElement('li');
           card.className = 'product';
@@ -144,6 +171,18 @@
           return card;
         });
         productList.replaceChildren(...cards);
+
+        if (bestSellerIndex !== -1) {
+          const bestSeller = cards[bestSellerIndex];
+          bestSeller.id = 'best-seller';
+          bestSeller.tabIndex = -1;
+
+          const link = document.createElement('a');
+          link.className = 'best-seller-link';
+          link.href = '#best-seller';
+          link.textContent = `Best seller: ${products[bestSellerIndex].name}`;
+          showcaseHeading.append(link);
+        }
       } catch {
         status.textContent = "Can't read products.json — check for a missing comma or quote.";
       }
