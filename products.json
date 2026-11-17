@@ -1,32 +1,26 @@
 [
   {
-    "name": "car model",
-    "pitch": "3d printed car model",
+    "name": "Phone Cases",
+    "pitch": "Four phone cases in pink, mint, white, and dark blue.",
     "label": "new",
-    "image": ""
+    "image": "images/phone-cases.jpg"
   },
   {
-    "name": "phone case",
-    "pitch": "3d printed phone case",
-    "label": "new",
-    "image": ""
-  },
-  {
-    "name": "Cat",
-    "pitch": "a tiny 3d printed cat that sits on your table",
+    "name": "Stickers",
+    "pitch": "Colorful stickers to mix and match on a laptop.",
     "label": "brand new",
-    "image": ""
+    "image": "images/stickers.jpg"
   },
   {
-    "name": "Gaming Mouse",
-    "pitch": "A 3d printed gaming mouse",
+    "name": "Sneakers",
+    "pitch": "Burgundy sneakers with white laces and a side stripe.",
     "label": "new",
-    "image": ""
+    "image": "images/sneakers.jpg"
   },
   {
-    "name": "Clock",
-    "pitch": "A 3d printed clock",
+    "name": "Building Bricks",
+    "pitch": "Bright building bricks stacked in rainbow order.",
     "label": "bestseller",
-    "image": ""
+    "image": "images/bricks.jpg"
   }
 ]

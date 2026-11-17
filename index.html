@@ -3,188 +3,397 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Sky-high’s 3D Printing Showcase</title>
+  <meta name="theme-color" content="#faf8ff">
+  <title>Sky-high’s Showcase</title>
   <style>
     :root {
       color-scheme: light;
       --ink: #282044;
-      --paper: #f7f4ff;
-      --lilac: #ded2fc;
+      --paper: #faf8ff;
+      --lilac: #e4dafa;
       --lemon: #ffeb9a;
       --mint: #c5efd9;
       --peach: #ffd6ca;
       font-family: Nunito, ui-rounded, "Arial Rounded MT Bold", system-ui, sans-serif;
       color: var(--ink);
       background: var(--paper);
+      scroll-padding-top: 5.5rem;
     }
 
     * { box-sizing: border-box; }
-
     body { margin: 0; }
+    a, button { color: inherit; }
+    button { font: inherit; cursor: pointer; }
+    :focus-visible, .product:target {
+      outline: 3px solid var(--ink);
+      outline-offset: 5px;
+    }
 
-    main {
-      width: min(100% - 2rem, 56rem);
+    .top-bar {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      border-bottom: 1px solid var(--ink);
+      background: var(--paper);
+    }
+
+    .top-bar nav, main {
+      width: min(100% - 2rem, 72rem);
       margin-inline: auto;
-      padding-block: clamp(2rem, 7vw, 5rem) 3rem;
     }
 
-    header { margin-bottom: clamp(1.75rem, 5vw, 3rem); }
-
-    header p {
-      margin: 0 0 .4rem;
-      font-weight: 700;
+    .top-bar nav {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: .25rem 1rem;
+      min-height: 3.75rem;
+      padding-block: .35rem;
     }
+
+    .top-bar a:not([hidden]) {
+      display: inline-block;
+      padding-block: .6rem;
+      font-weight: 750;
+      text-underline-offset: .2em;
+    }
+
+    .wordmark {
+      font-size: 1.3rem;
+      letter-spacing: -.04em;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0 1rem;
+    }
+
+    main { padding-block: clamp(1.25rem, 4vw, 3rem) 4rem; }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr);
+      align-items: stretch;
+      overflow: hidden;
+      background: var(--lilac);
+      border-radius: 1.5rem;
+      box-shadow: 0 6px var(--ink), 0 11px var(--lemon);
+    }
+
+    .hero-copy {
+      align-self: center;
+      padding: clamp(1.4rem, 5vw, 4rem);
+    }
+
+    .hero-copy p { margin: 0 0 .65rem; font-weight: 750; }
+    h1, h2, h3 { margin: 0; line-height: 1.04; text-wrap: balance; }
 
     h1 {
-      max-width: 14ch;
-      margin: 0;
-      font-size: clamp(2.25rem, 7vw, 4.5rem);
-      line-height: 1;
-      letter-spacing: -.045em;
+      font-size: clamp(2.7rem, 7vw, 6rem);
+      letter-spacing: -.075em;
     }
 
-    .best-seller-link {
+    .hero-link {
       display: inline-block;
-      margin-top: 1rem;
-      padding: .65rem 1rem;
-      border: 2px solid currentColor;
+      margin-top: 1.35rem;
+      padding: .75rem 1rem;
       border-radius: 99px;
-      background: var(--mint);
-      color: var(--ink);
+      background: var(--ink);
+      color: var(--paper);
+      font-weight: 750;
+      text-decoration: none;
+    }
+
+    .hero-link:hover { text-decoration: underline; }
+
+    .photo {
+      position: relative;
+      display: grid;
+      place-items: center;
+      margin: 0;
+      overflow: hidden;
+      aspect-ratio: 4 / 3;
+      background: repeating-linear-gradient(135deg, transparent 0 10px, #2820440a 10px 12px),
+        var(--photo-color, var(--lilac));
+    }
+
+    .photo img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .placeholder {
+      padding: .5rem .85rem;
+      border: 1px solid currentColor;
+      border-radius: 99px;
+      background: var(--paper);
       font-weight: 700;
-      text-underline-offset: .18em;
-      overflow-wrap: anywhere;
     }
 
-    .best-seller-link:hover { background: var(--lilac); }
+    .hero .photo { aspect-ratio: 1; }
 
-    .best-seller-link:focus-visible,
-    #best-seller:target {
-      outline: 3px solid var(--ink);
-      outline-offset: 4px;
+    .collection { margin-top: clamp(3rem, 7vw, 5rem); }
+    .collection h2 {
+      margin-bottom: 1.15rem;
+      font-size: clamp(2rem, 4vw, 3.25rem);
+      letter-spacing: -.06em;
     }
-
-    #best-seller { scroll-margin-top: 1rem; }
 
     .products {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 1.4rem;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1.15rem;
       margin: 0;
       padding: 0;
       list-style: none;
     }
 
     .product {
-      --card-color: var(--lilac);
-      padding: clamp(1rem, 3vw, 1.6rem);
-      border: 2px solid var(--ink);
-      border-radius: 1.25rem 1.25rem 1.75rem 1.75rem;
-      background: var(--card-color);
-      box-shadow: 0 3px var(--ink), 0 6px var(--card-color), 0 8px var(--ink);
+      position: relative;
+      min-width: 0;
+      overflow: hidden;
+      border-radius: 1rem;
+      background: white;
+      box-shadow: 0 2px var(--ink);
+      border: 1px solid var(--ink);
       overflow-wrap: anywhere;
     }
 
-    .product:nth-child(even) { --card-color: var(--peach); }
-    .product:nth-child(3n) { --card-color: var(--mint); }
-    .product.featured { --card-color: var(--lemon); }
-
-    .product img {
-      display: block;
-      width: 100%;
-      height: clamp(10rem, 40vw, 16rem);
-      object-fit: contain;
-      border-radius: .75rem;
-      margin-bottom: 1rem;
-    }
-
-    .product h2 {
-      margin: 0;
-      font-size: clamp(1.4rem, 3.2vw, 2rem);
-      line-height: 1.15;
-    }
-
-    .product p {
-      margin: .5rem 0 .85rem;
-      line-height: 1.4;
-    }
+    .product:nth-child(4n + 2) { --photo-color: var(--mint); }
+    .product:nth-child(4n + 3) { --photo-color: var(--lemon); }
+    .product:nth-child(4n + 4) { --photo-color: var(--peach); }
+    .product .photo img { object-position: center 58%; }
+    .card-copy { padding: 1rem; }
+    .card-copy h3 { font-size: 1.35rem; }
+    .card-copy p { margin: .55rem 0 .8rem; line-height: 1.4; }
 
     .label {
       display: inline-block;
-      padding: .2rem .65rem;
-      border: 1px solid var(--ink);
+      margin-bottom: .65rem;
+      padding: .2rem .55rem;
       border-radius: 99px;
-      background: var(--paper);
-      font-size: .875rem;
-      font-weight: 700;
+      background: var(--lemon);
+      font-size: .85rem;
+      font-weight: 750;
     }
 
-    @media (max-width: 37.5rem) {
-      .products { grid-template-columns: minmax(0, 1fr); }
+    .card-button {
+      padding: .35rem 0;
+      border: 0;
+      background: transparent;
+      font-weight: 750;
+      text-decoration: underline;
+      text-underline-offset: .2em;
+    }
+
+    .card-button::after { content: ""; position: absolute; inset: 0; }
+    .product:focus-within { outline: 3px solid var(--ink); outline-offset: 4px; }
+
+    dialog {
+      width: min(54rem, 100% - 2rem);
+      max-height: 90dvh;
+      overscroll-behavior: contain;
+      padding: 0;
+      border: 1px solid var(--ink);
+      border-radius: 1.25rem;
+      background: var(--paper);
+      color: var(--ink);
+    }
+
+    dialog::backdrop { background: #282044a8; }
+    body:has(dialog[open]) { overflow: hidden; }
+
+    .detail-bar {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      display: flex;
+      justify-content: flex-end;
+      padding: .75rem 1rem;
+      background: var(--paper);
+    }
+
+    .close-button {
+      padding: .55rem .9rem;
+      border: 1px solid currentColor;
+      border-radius: 99px;
+      background: var(--mint);
+    }
+
+    .close-button:hover { background: var(--lilac); }
+    .detail-photo .photo { height: min(52dvh, 34rem); aspect-ratio: auto; }
+    .detail-photo img { object-fit: contain; }
+    .detail-copy { padding: 1.25rem; overflow-wrap: anywhere; }
+    .detail-copy h2 { font-size: clamp(1.85rem, 5vw, 3rem); }
+    .detail-copy p { margin-bottom: 0; }
+
+    @media (max-width: 62rem) {
+      .products { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 42rem) {
+      :root { scroll-padding-top: 6.5rem; }
+      .hero, .products { grid-template-columns: minmax(0, 1fr); }
+      .hero .photo { aspect-ratio: 4 / 3; }
+      .product .photo { aspect-ratio: 2 / 1; }
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .product.entered { animation: rise .45s ease-out both; }
+      @keyframes rise {
+        from { transform: translateY(.55rem); opacity: .83; }
+        to { transform: translateY(0); opacity: 1; }
+      }
+
+      @media (hover: hover) {
+        .product .photo img { transition: transform .35s ease-out; }
+        .product:hover .photo img { transform: scale(1.045); }
+      }
     }
   </style>
 </head>
-<body>
+<body id="top">
+  <header class="top-bar">
+    <nav aria-label="Showcase">
+      <a class="wordmark" href="#top">Sky-high</a>
+      <div class="nav-links">
+        <a href="#collection">Collection</a>
+        <a id="best-seller-link" href="#best-seller" hidden>Best seller</a>
+      </div>
+    </nav>
+  </header>
   <main>
-    <header id="showcase-heading">
-      <p>Hello world!</p>
-      <h1>Sky-high’s 3D Printing Showcase</h1>
-    </header>
-    <ul class="products" id="products" aria-label="3D printed products" role="list"></ul>
-    <p id="product-status" role="status"></p>
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <p>Hello world!</p>
+        <h1 id="hero-title">Sky-high’s Showcase</h1>
+        <a class="hero-link" href="#collection">Explore the collection</a>
+      </div>
+      <div id="hero-photo"></div>
+    </section>
+    <section class="collection" id="collection" aria-labelledby="collection-title">
+      <h2 id="collection-title">The collection</h2>
+      <p id="product-status" role="status">Loading products…</p>
+      <ul class="products" id="products" role="list"></ul>
+    </section>
   </main>
+  <dialog id="product-detail" aria-labelledby="detail-title">
+    <form method="dialog" class="detail-bar">
+      <button type="submit" class="close-button" autofocus>Close details</button>
+    </form>
+    <div class="detail-photo" id="detail-photo"></div>
+    <div class="detail-copy">
+      <span class="label" id="detail-label"></span>
+      <h2 id="detail-title"></h2>
+      <p id="detail-pitch"></p>
+    </div>
+  </dialog>
   <script>
-    const showcaseHeading = document.querySelector('#showcase-heading');
     const productList = document.querySelector('#products');
-    const status = document.querySelector('#product-status');
+    const productStatus = document.querySelector('#product-status');
+    const heroPhoto = document.querySelector('#hero-photo');
+    const detail = document.querySelector('#product-detail');
+
+    function productPhoto(product, loading = 'eager') {
+      const frame = document.createElement('div');
+      frame.className = 'photo';
+      const placeholder = document.createElement('span');
+      placeholder.className = 'placeholder';
+      placeholder.textContent = 'Photo unavailable';
+      frame.append(placeholder);
+
+      if (product?.image) {
+        const photo = document.createElement('img');
+        photo.alt = product.name;
+        photo.loading = loading;
+        photo.decoding = 'async';
+        photo.addEventListener('load', () => { placeholder.hidden = true; }, { once: true });
+        photo.addEventListener('error', () => { photo.remove(); }, { once: true });
+        photo.src = product.image;
+        frame.append(photo);
+      }
+      return frame;
+    }
+
+    function openDetails(product) {
+      document.querySelector('#detail-title').textContent = product.name;
+      document.querySelector('#detail-pitch').textContent = product.pitch;
+      document.querySelector('#detail-label').textContent = product.label;
+      document.querySelector('#detail-photo').replaceChildren(productPhoto(product));
+      detail.showModal();
+      detail.scrollTop = 0;
+    }
+
+    function productCard(product) {
+      const card = document.createElement('li');
+      card.className = 'product';
+      const copy = document.createElement('div');
+      copy.className = 'card-copy';
+      const label = document.createElement('span');
+      label.className = 'label';
+      label.textContent = product.label;
+      const title = document.createElement('h3');
+      title.textContent = product.name;
+      const pitch = document.createElement('p');
+      pitch.textContent = product.pitch;
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'card-button';
+      button.textContent = 'View details';
+      button.setAttribute('aria-label', 'View details for ' + product.name);
+      button.addEventListener('click', () => openDetails(product));
+      copy.append(label, title, pitch, button);
+      card.append(productPhoto(product, 'lazy'), copy);
+      return card;
+    }
+
+    function animateCards(cards) {
+      if (!('IntersectionObserver' in window) ||
+          !matchMedia('(prefers-reduced-motion: no-preference)').matches) return;
+      const observer = new IntersectionObserver((entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('entered');
+            observer.unobserve(entry.target);
+          }
+        }
+      }, { threshold: .12 });
+      cards.forEach(card => observer.observe(card));
+    }
 
     async function loadProducts() {
       try {
         const response = await fetch('products.json', { cache: 'no-store' });
         if (!response.ok) throw new Error('Product file could not be read');
-
         const products = await response.json();
+        const cards = products.map(productCard);
+        productList.replaceChildren(...cards);
+        heroPhoto.replaceChildren(productPhoto(products.find(product => product.image)));
+        productStatus.textContent = cards.length ? '' : 'No products to show yet.';
+        productStatus.hidden = cards.length > 0;
+
         const bestSellerIndex = products.findIndex(({ label }) =>
           typeof label === 'string' && /^best[\s-]*seller$/i.test(label.trim())
         );
-        const cards = products.map(({ name, pitch, label, image }) => {
-          const card = document.createElement('li');
-          card.className = 'product';
-          card.classList.toggle('featured', name === 'Cat');
-
-          if (image) {
-            const photo = document.createElement('img');
-            photo.src = image;
-            photo.alt = name;
-            card.append(photo);
-          }
-
-          const title = document.createElement('h2');
-          title.textContent = name;
-          const description = document.createElement('p');
-          description.textContent = pitch;
-          const tag = document.createElement('span');
-          tag.className = 'label';
-          tag.textContent = label;
-
-          card.append(title, description, tag);
-          return card;
-        });
-        productList.replaceChildren(...cards);
-
         if (bestSellerIndex !== -1) {
           const bestSeller = cards[bestSellerIndex];
           bestSeller.id = 'best-seller';
           bestSeller.tabIndex = -1;
-
-          const link = document.createElement('a');
-          link.className = 'best-seller-link';
-          link.href = '#best-seller';
-          link.textContent = `Best seller: ${products[bestSellerIndex].name}`;
-          showcaseHeading.append(link);
+          const link = document.querySelector('#best-seller-link');
+          link.hidden = false;
+          link.setAttribute('aria-label', 'Best seller: ' + products[bestSellerIndex].name);
         }
+        animateCards(cards);
       } catch {
-        status.textContent = "Can't read products.json — check for a missing comma or quote.";
+        heroPhoto.replaceChildren(productPhoto());
+        productStatus.hidden = false;
+        productStatus.textContent = "Can't read products.json — check for a missing comma or quote.";
       }
     }
 
