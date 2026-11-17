@@ -1,5 +1,11 @@
 [
   {
+    "name": "A car model",
+    "pitch": "3d printed car model",
+    "label": "new",
+    "image": ""
+  },
+  {
     "name": "A phone case",
     "pitch": "3d printed phone case",
     "label": "new",
