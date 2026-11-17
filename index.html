@@ -3,10 +3,152 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Sky-high</title>
+  <title>Sky-high’s 3D Printing Showcase</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #282044;
+      --paper: #f7f4ff;
+      --lilac: #ded2fc;
+      --lemon: #ffeb9a;
+      --mint: #c5efd9;
+      --peach: #ffd6ca;
+      font-family: Nunito, ui-rounded, "Arial Rounded MT Bold", system-ui, sans-serif;
+      color: var(--ink);
+      background: var(--paper);
+    }
+
+    * { box-sizing: border-box; }
+
+    body { margin: 0; }
+
+    main {
+      width: min(100% - 2rem, 56rem);
+      margin-inline: auto;
+      padding-block: clamp(2rem, 7vw, 5rem) 3rem;
+    }
+
+    header { margin-bottom: clamp(1.75rem, 5vw, 3rem); }
+
+    header p {
+      margin: 0 0 .4rem;
+      font-weight: 700;
+    }
+
+    h1 {
+      max-width: 14ch;
+      margin: 0;
+      font-size: clamp(2.25rem, 7vw, 4.5rem);
+      line-height: 1;
+      letter-spacing: -.045em;
+    }
+
+    .products {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1.4rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .product {
+      --card-color: var(--lilac);
+      padding: clamp(1rem, 3vw, 1.6rem);
+      border: 2px solid var(--ink);
+      border-radius: 1.25rem 1.25rem 1.75rem 1.75rem;
+      background: var(--card-color);
+      box-shadow: 0 3px var(--ink), 0 6px var(--card-color), 0 8px var(--ink);
+      overflow-wrap: anywhere;
+    }
+
+    .product:nth-child(even) { --card-color: var(--peach); }
+    .product:nth-child(3n) { --card-color: var(--mint); }
+    .product.featured { --card-color: var(--lemon); }
+
+    .product img {
+      display: block;
+      max-width: 100%;
+      max-height: 16rem;
+      border-radius: .75rem;
+      margin-bottom: 1rem;
+    }
+
+    .product h2 {
+      margin: 0;
+      font-size: clamp(1.4rem, 3.2vw, 2rem);
+      line-height: 1.15;
+    }
+
+    .product p {
+      margin: .5rem 0 .85rem;
+      line-height: 1.4;
+    }
+
+    .label {
+      display: inline-block;
+      padding: .2rem .65rem;
+      border: 1px solid var(--ink);
+      border-radius: 99px;
+      background: var(--paper);
+      font-size: .875rem;
+      font-weight: 700;
+    }
+
+    @media (max-width: 37.5rem) {
+      .products { grid-template-columns: minmax(0, 1fr); }
+    }
+  </style>
 </head>
 <body>
-  <h1>Sky-high</h1>
-  <p>Hello world!</p>
+  <main>
+    <header>
+      <p>Hello world!</p>
+      <h1>Sky-high’s 3D Printing Showcase</h1>
+    </header>
+    <ul class="products" id="products" aria-label="3D printed products" role="list"></ul>
+    <p id="product-status" role="status"></p>
+  </main>
+  <script>
+    const productList = document.querySelector('#products');
+    const status = document.querySelector('#product-status');
+
+    async function loadProducts() {
+      try {
+        const response = await fetch('products.json', { cache: 'no-store' });
+        if (!response.ok) throw new Error('Product file could not be read');
+
+        const products = await response.json();
+        const cards = products.map(({ name, pitch, label, image }) => {
+          const card = document.createElement('li');
+          card.className = 'product';
+          card.classList.toggle('featured', name === 'Cat');
+
+          if (image) {
+            const photo = document.createElement('img');
+            photo.src = image;
+            photo.alt = name;
+            card.append(photo);
+          }
+
+          const title = document.createElement('h2');
+          title.textContent = name;
+          const description = document.createElement('p');
+          description.textContent = pitch;
+          const tag = document.createElement('span');
+          tag.className = 'label';
+          tag.textContent = label;
+
+          card.append(title, description, tag);
+          return card;
+        });
+        productList.replaceChildren(...cards);
+      } catch {
+        status.textContent = "Can't read products.json — check for a missing comma or quote.";
+      }
+    }
+
+    loadProducts();
+  </script>
 </body>
 </html>
